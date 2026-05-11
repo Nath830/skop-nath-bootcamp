@@ -38,20 +38,6 @@
             font-weight: 400;
         }
 
-        #counter {
-            color: #FFFFFF;
-            opacity: 0.85;
-            font-size: 1rem;
-            margin-top: 2.5rem;
-            min-height: 1.5rem;
-        }
-
-        #counter strong {
-            color: #C8A2D9;
-            font-weight: 700;
-            font-size: 1.4rem;
-        }
-
         .signature {
             position: absolute;
             bottom: 1.5rem;
@@ -64,36 +50,6 @@
 <body>
     <h1>✅ Test de la stack</h1>
     <h2>Bootcamp Ops &amp; Product · Delta Business School</h2>
-    <p id="counter">Connexion à Supabase…</p>
     <p class="signature">Setup réalisé via Claude Code</p>
-
-    <script type="module">
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-        const SUPABASE_URL = 'https://vqpuyvzgxrdhndpeyash.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxcHV5dnpneHJkaG5kcGV5YXNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0ODMyNTksImV4cCI6MjA5NDA1OTI1OX0.HOycFD-myp_EBuHhfZeDmuwjaX2EED5Q8XVxW7neLXc';
-
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const counterEl = document.getElementById('counter');
-
-        try {
-            // 1) Enregistrer cette visite (INSERT)
-            const { error: insertError } = await supabase
-                .from('visits')
-                .insert({});
-            if (insertError) throw insertError;
-
-            // 2) Compter le total de visites (SELECT count)
-            const { count, error: countError } = await supabase
-                .from('visits')
-                .select('*', { count: 'exact', head: true });
-            if (countError) throw countError;
-
-            counterEl.innerHTML = `Visites enregistrées&nbsp;: <strong>${count}</strong>`;
-        } catch (err) {
-            counterEl.innerHTML = `❌ Erreur Supabase&nbsp;: ${err.message}`;
-            console.error('Supabase error:', err);
-        }
-    </script>
 </body>
 </html>
