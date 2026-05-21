@@ -16,16 +16,13 @@ const COMMANDS = [
   { group: 'Navigation', iconName: 'Building2', label: 'Aller à Organisation', shortcut: 'O', to: '/organisation' },
 
   // Studio — canaux
-  { group: 'Studio — canaux', iconName: 'Linkedin', label: 'LinkedIn (posts entreprise + perso)', to: '/creation?channel=linkedin' },
-  { group: 'Studio — canaux', iconName: 'Building2', label: 'LinkedIn Page (améliorations)', to: '/creation?channel=linkedinPage' },
-  { group: 'Studio — canaux', iconName: 'MessageSquare', label: 'LinkedIn Commentaires', to: '/creation?channel=linkedinComments' },
+  { group: 'Studio — canaux', iconName: 'Linkedin', label: 'LinkedIn (posts, page, commentaires offensifs)', to: '/creation?channel=linkedin' },
   { group: 'Studio — canaux', iconName: 'MessageCircle', label: 'Reddit (posts authentiques)', to: '/creation?channel=reddit' },
   { group: 'Studio — canaux', iconName: 'Youtube', label: 'YouTube (scripts long format)', to: '/creation?channel=youtube' },
   { group: 'Studio — canaux', iconName: 'HelpCircle', label: 'FAQ (basées sur fanouts)', to: '/creation?channel=faq' },
   { group: 'Studio — canaux', iconName: 'Code', label: 'Code site (améliorations techniques)', to: '/creation?channel=codeSite' },
-  { group: 'Studio — canaux', iconName: 'FileText', label: 'Blog externe (articles à pitcher)', to: '/creation?channel=blogExterne' },
-  { group: 'Studio — canaux', iconName: 'Star', label: 'Avis (récolte clients)', to: '/creation?channel=avis' },
-  { group: 'Studio — canaux', iconName: 'MessageSquare', label: 'Réponse avis (templates)', to: '/creation?channel=reponseAvis' },
+  { group: 'Studio — canaux', iconName: 'FileText', label: 'Blog externe (articles complets à pitcher)', to: '/creation?channel=blogExterne' },
+  { group: 'Studio — canaux', iconName: 'Star', label: 'Avis (récolte + réponses)', to: '/creation?channel=avis' },
 
   // Sous-pages
   { group: 'Sous-pages', iconName: 'Calendar', label: 'Voir le Calendrier des tâches', to: '/organisation', hint: 'Onglet Calendrier' },

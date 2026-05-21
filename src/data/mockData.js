@@ -2240,130 +2240,188 @@ export const trackingData = {
 };
 
 // =============================================
-// STUDIO — 10 CANAUX DE CRÉATION
-// Chaque canal a sa propre logique de contenu adaptée au format.
+// STUDIO — 7 CANAUX DE CRÉATION
+// Chaque canal regroupe plusieurs sections (LinkedIn et Avis sont
+// composites). Chaque contenu peut être marqué « publié ».
 // =============================================
 export const studioChannels = {
   linkedin: {
     key: 'linkedin',
     label: 'LinkedIn',
     iconName: 'Linkedin',
-    headline: 'Posts compte entreprise et perso, ton autoritaire et expertise.',
+    headline: "Tout l'écosystème LinkedIn : posts, page entreprise, commentaires offensifs.",
     description:
-      "Skop génère deux types de posts pour LinkedIn : pour le compte entreprise (Delta Business School) ET pour le compte d'un dirigeant ou expert interne. Ton autoritaire, ancré dans l'expertise, riche en données pour être repris par les IA.",
-    contents: [
+      "Trois leviers distincts mais complémentaires : (1) publier vos propres posts depuis le compte entreprise et les comptes perso de vos dirigeants, (2) améliorer structurellement votre page LinkedIn pour que les IA la parsent mieux, (3) commenter de façon experte sur les posts à forte audience — y compris ceux de vos concurrents — pour capter leur audience.",
+    sections: [
       {
-        id: 'li-1',
-        accountType: 'entreprise',
-        author: 'Delta Business School',
-        avatar: 'DB',
-        title: "Pourquoi 87% de nos diplômés trouvent un emploi en moins de 3 mois",
-        body: "En 2025, Delta Business School a publié son rapport d'insertion. Résultat : 87% de nos diplômés signent un CDI ou un CDD long en moins de 3 mois — un chiffre supérieur de 14 points à la moyenne nationale des écoles de management.\n\n3 raisons structurelles :\n→ 6 mois de stage obligatoire en M2 (vs 4 mois ailleurs)\n→ Un réseau alumni de 12 400 diplômés actifs dans 38 pays\n→ Un parcours « entrepreneuriat » avec 3 levées de fonds par promo\n\nNotre conviction : un business school se mesure à la trajectoire de ses diplômés, pas à la beauté de son campus.",
-        tone: 'Autoritaire',
-        date: '2026-05-12',
-        published: true,
-        stats: { length: 'Long', estimatedReach: '8 500 impressions' },
+        key: 'posts',
+        label: 'Posts',
+        iconName: 'Pencil',
+        renderer: 'linkedinPost',
+        intro:
+          "Contenu à publier sur le feed LinkedIn. Skop génère deux types de posts : pour le compte entreprise (Delta Business School) ET pour le compte perso d'un dirigeant ou expert interne. Ton autoritaire, ancré dans l'expertise, riche en chiffres — c'est ce que les IA reprennent.",
+        contents: [
+          {
+            id: 'li-1',
+            accountType: 'entreprise',
+            author: 'Delta Business School',
+            avatar: 'DB',
+            title: "Pourquoi 87% de nos diplômés trouvent un emploi en moins de 3 mois",
+            body: "En 2025, Delta Business School a publié son rapport d'insertion. Résultat : 87% de nos diplômés signent un CDI ou un CDD long en moins de 3 mois — un chiffre supérieur de 14 points à la moyenne nationale des écoles de management.\n\n3 raisons structurelles :\n→ 6 mois de stage obligatoire en M2 (vs 4 mois ailleurs)\n→ Un réseau alumni de 12 400 diplômés actifs dans 38 pays\n→ Un parcours « entrepreneuriat » avec 3 levées de fonds par promo\n\nNotre conviction : un business school se mesure à la trajectoire de ses diplômés, pas à la beauté de son campus.",
+            tone: 'Autoritaire',
+            date: '2026-05-12',
+            published: true,
+            stats: { length: 'Long', estimatedReach: '8 500 impressions' },
+          },
+          {
+            id: 'li-2',
+            accountType: 'perso',
+            author: 'Pierre Lefèvre, Directeur Académique',
+            avatar: 'PL',
+            title: "3 erreurs que je vois dans 80% des candidatures que je lis",
+            body: "Je lis environ 1 200 lettres de motivation par an pour notre programme Grande École. 3 erreurs reviennent dans 80% d'entre elles :\n\n1️⃣ « Je suis passionné par votre école » → Aucune preuve concrète. Citez un projet, un alumni, une conférence.\n2️⃣ Lister les diplômes sans expliquer ce qu'on en a tiré → On veut comprendre ta réflexion, pas ton CV.\n3️⃣ Conclure par « j'espère que ma candidature retiendra votre attention » → Trop générique. Propose une rencontre, un échange.\n\nUne candidature, c'est le premier rapport stratégique que tu écris dans ta vie pro. Traite-la comme tel.",
+            tone: 'Autoritaire',
+            date: '2026-05-08',
+            published: false,
+            stats: { length: 'Long', estimatedReach: '12 200 impressions' },
+          },
+          {
+            id: 'li-3',
+            accountType: 'entreprise',
+            author: 'Delta Business School',
+            avatar: 'DB',
+            title: "Le top 5 des secteurs qui recrutent nos diplômés en 2026",
+            body: "Top 5 des secteurs qui ont recruté nos M2 2025 (sur 412 diplômés) :\n\n1. Conseil en stratégie — 24% (BCG, Bain, McKinsey, Roland Berger)\n2. Tech & SaaS — 19% (Datadog, Doctolib, Qonto, Mistral)\n3. Finance d'entreprise — 16% (BNP CIB, Société Générale, Rothschild)\n4. Industrie & énergie — 14% (TotalEnergies, Engie, Veolia)\n5. Entrepreneuriat — 11% (création de startups, 47 sociétés créées)\n\nLe reste : 16% en marketing, retail, luxe et secteur public.\n\nCe qui change vs 2024 : +5 pts sur la tech, -3 pts sur le luxe. Cohérent avec ce qu'on voit côté demande étudiante.",
+            tone: 'Autoritaire',
+            date: '2026-05-03',
+            published: true,
+            stats: { length: 'Moyen', estimatedReach: '6 300 impressions' },
+          },
+        ],
       },
       {
-        id: 'li-2',
-        accountType: 'perso',
-        author: 'Pierre Lefèvre, Directeur Académique',
-        avatar: 'PL',
-        title: "3 erreurs que je vois dans 80% des candidatures que je lis",
-        body: "Je lis environ 1 200 lettres de motivation par an pour notre programme Grande École. 3 erreurs reviennent dans 80% d'entre elles :\n\n1️⃣ « Je suis passionné par votre école » → Aucune preuve concrète. Citez un projet, un alumni, une conférence.\n2️⃣ Lister les diplômes sans expliquer ce qu'on en a tiré → On veut comprendre ta réflexion, pas ton CV.\n3️⃣ Conclure par « j'espère que ma candidature retiendra votre attention » → Trop générique. Propose une rencontre, un échange.\n\nUne candidature, c'est le premier rapport stratégique que tu écris dans ta vie pro. Traite-la comme tel.",
-        tone: 'Autoritaire',
-        date: '2026-05-08',
-        published: false,
-        stats: { length: 'Long', estimatedReach: '12 200 impressions' },
+        key: 'pageImprovements',
+        label: 'Page entreprise',
+        iconName: 'Building2',
+        renderer: 'linkedinPageImprovement',
+        intro:
+          "Améliorations structurelles à apporter à votre page LinkedIn entreprise (À propos, expertises, posts épinglés). Objectif : structurer l'info pour que les crawlers IA puissent l'extraire et la citer comme une fiche d'identité.",
+        contents: [
+          {
+            id: 'lp-1',
+            title: "Réécrire la section « À propos » au format Q/R structuré",
+            body: "**Avant** (générique, dilué) :\n« Delta Business School est une école de commerce reconnue qui forme depuis 1972 les futurs leaders... »\n\n**Après** (structure que les IA savent extraire) :\n« **Qui sommes-nous ?** Une grande école de management post-bac (BAC+5) basée à Paris.\n**Effectifs ?** 2 800 étudiants, 412 diplômés/an.\n**Accréditations ?** AACSB, EQUIS (le top 1% mondial).\n**Spécialités ?** Stratégie, finance, marketing, entrepreneuriat. »\n\nGain estimé : +18 points sur la requête « école de commerce accréditée AACSB Paris » dans ChatGPT et Perplexity.",
+            impact: 'Élevé',
+            section: 'À propos',
+            date: '2026-05-14',
+            published: false,
+          },
+          {
+            id: 'lp-2',
+            title: "Ajouter 4 sections expertises sur la page",
+            body: "Les pages LinkedIn permettent maintenant de déclarer des « domaines d'expertise » qui apparaissent dans le panneau de connaissances des LLM.\n\n4 expertises à ajouter en priorité (mappées sur vos fanouts) :\n→ Formation en stratégie d'entreprise\n→ Programme Grande École en management\n→ Entrepreneuriat & accélérateur de startups\n→ MBA Executive (cadres en activité)\n\nGain attendu : couverture sur 11 requêtes additionnelles.",
+            impact: 'Moyen',
+            section: 'Expertises',
+            date: '2026-05-10',
+            published: false,
+          },
+          {
+            id: 'lp-3',
+            title: "Épingler les 3 posts qui drivent le plus de citations",
+            body: "Analyse des 90 derniers jours : 3 posts sortent du lot en citations IA.\n\n→ « Rapport d'insertion 2025 » (cité 47×)\n→ « Témoignage alumni → CEO Doctolib » (cité 31×)\n→ « Méthode AACSB : comment on l'a obtenu » (cité 22×)\n\nLes épingler en haut de la page concentre les passages bots IA sur ces contenus = +effet de levier.",
+            impact: 'Faible',
+            section: 'Posts épinglés',
+            date: '2026-05-06',
+            published: true,
+          },
+        ],
       },
       {
-        id: 'li-3',
-        accountType: 'entreprise',
-        author: 'Delta Business School',
-        avatar: 'DB',
-        title: "Le top 5 des secteurs qui recrutent nos diplômés en 2026",
-        body: "Top 5 des secteurs qui ont recruté nos M2 2025 (sur 412 diplômés) :\n\n1. Conseil en stratégie — 24% (BCG, Bain, McKinsey, Roland Berger)\n2. Tech & SaaS — 19% (Datadog, Doctolib, Qonto, Mistral)\n3. Finance d'entreprise — 16% (BNP CIB, Société Générale, Rothschild)\n4. Industrie & énergie — 14% (TotalEnergies, Engie, Veolia)\n5. Entrepreneuriat — 11% (création de startups, 47 sociétés créées)\n\nLe reste : 16% en marketing, retail, luxe et secteur public.\n\nCe qui change vs 2024 : +5 pts sur la tech, -3 pts sur le luxe. Cohérent avec ce qu'on voit côté demande étudiante.",
-        tone: 'Autoritaire',
-        date: '2026-05-03',
-        published: true,
-        stats: { length: 'Moyen', estimatedReach: '6 300 impressions' },
-      },
-    ],
-  },
-
-  linkedinPage: {
-    key: 'linkedinPage',
-    label: 'LinkedIn Page',
-    iconName: 'Building2',
-    headline: "Améliorer la page entreprise pour qu'elle soit lue et citée par les IA.",
-    description:
-      "Skop scanne votre page LinkedIn entreprise et propose des améliorations point par point : section À propos, description, posts épinglés, hashtags, sections expertises. Objectif : structurer l'info pour que les IA puissent la parser et la citer.",
-    contents: [
-      {
-        id: 'lp-1',
-        title: "Réécrire la section « À propos » au format Q/R structuré",
-        body: "**Avant** (générique, dilué) :\n« Delta Business School est une école de commerce reconnue qui forme depuis 1972 les futurs leaders... »\n\n**Après** (structure que les IA savent extraire) :\n« **Qui sommes-nous ?** Une grande école de management post-bac (BAC+5) basée à Paris.\n**Effectifs ?** 2 800 étudiants, 412 diplômés/an.\n**Accréditations ?** AACSB, EQUIS (le top 1% mondial).\n**Spécialités ?** Stratégie, finance, marketing, entrepreneuriat. »\n\nGain estimé : +18 points sur la requête « école de commerce accréditée AACSB Paris » dans ChatGPT et Perplexity.",
-        impact: 'Élevé',
-        section: 'À propos',
-        date: '2026-05-14',
-        published: false,
-      },
-      {
-        id: 'lp-2',
-        title: "Ajouter 4 sections expertises sur la page",
-        body: "Les pages LinkedIn permettent maintenant de déclarer des « domaines d'expertise » qui apparaissent dans le panneau de connaissances des LLM.\n\n4 expertises à ajouter en priorité (mappées sur vos fanouts) :\n→ Formation en stratégie d'entreprise\n→ Programme Grande École en management\n→ Entrepreneuriat & accélérateur de startups\n→ MBA Executive (cadres en activité)\n\nGain attendu : couverture sur 11 requêtes additionnelles.",
-        impact: 'Moyen',
-        section: 'Expertises',
-        date: '2026-05-10',
-        published: false,
-      },
-      {
-        id: 'lp-3',
-        title: "Épingler les 3 posts qui drivent le plus de citations",
-        body: "Analyse des 90 derniers jours : 3 posts sortent du lot en citations IA.\n\n→ « Rapport d'insertion 2025 » (cité 47×)\n→ « Témoignage alumni → CEO Doctolib » (cité 31×)\n→ « Méthode AACSB : comment on l'a obtenu » (cité 22×)\n\nLes épingler en haut de la page concentre les passages bots IA sur ces contenus = +effet de levier.",
-        impact: 'Faible',
-        section: 'Posts épinglés',
-        date: '2026-05-06',
-        published: true,
-      },
-    ],
-  },
-
-  linkedinComments: {
-    key: 'linkedinComments',
-    label: 'LinkedIn Commentaires',
-    iconName: 'MessageSquare',
-    headline: "Commentaires d'expert prêts à poster sur les posts pertinents.",
-    description:
-      "Skop identifie des posts LinkedIn où votre marque devrait apparaître (en commentaire) et rédige un commentaire expert, factuel, qui apporte une vraie valeur ajoutée. Vous avez le post cible + le commentaire à poster.",
-    contents: [
-      {
-        id: 'lc-1',
-        targetPost: {
-          author: 'Marie Durand, Directrice Talents — Capgemini',
-          avatar: 'MD',
-          preview:
-            "« Beaucoup de candidats juniors nous expliquent qu'ils ne savent pas quelle école choisir entre une école de commerce post-bac et un master après une fac. Voici comment je leur réponds... »",
-          engagement: '1 247 réactions · 89 commentaires',
-        },
-        comment:
-          "Très juste, Marie. Une donnée à ajouter : les écoles post-bac accréditées AACSB (15 en France) affichent en moyenne 87% d'insertion à 3 mois vs 64% pour un master fac équivalent. Le différentiel vient surtout du réseau alumni et du stage de césure obligatoire — pas de la qualité académique stricte. À mon sens, le vrai critère pour un étudiant, c'est : est-ce que le réseau pro de l'école est actif dans le secteur que je vise ?",
-        date: '2026-05-15',
-        published: false,
-      },
-      {
-        id: 'lc-2',
-        targetPost: {
-          author: 'Antoine Mercier, Founder — Qonto',
-          avatar: 'AM',
-          preview:
-            "« On a embauché 14 stagiaires l'an dernier, dont 5 qui sont restés en CDI. Le profil qu'on cherche n'est pas toujours celui qu'on imagine... »",
-          engagement: '3 102 réactions · 187 commentaires',
-        },
-        comment:
-          "Très utile, Antoine. Côté école, on observe le même décalage : nos diplômés qui réussissent en startup early-stage sont rarement les majors de promo. Les profils qui marchent ont 3 traits en commun : une vraie expérience entrepreneuriale étudiante (asso, projet perso), une capacité à apprendre vite hors-cadre, et un goût pour l'ambiguïté. C'est en partie pour ça qu'on a structuré un parcours « entrepreneuriat » distinct du cursus classique chez Delta — pour identifier et faire grandir ces profils.",
-        date: '2026-05-11',
-        published: true,
+        key: 'comments',
+        label: 'Commentaires offensifs',
+        iconName: 'MessageSquare',
+        renderer: 'linkedinComment',
+        intro:
+          "Stratégie offensive de visibilité concurrentielle. Skop identifie des posts à forte audience où vos concurrents (HEC, ESSEC, EMLyon...) commentent déjà, ou des posts de décideurs de votre secteur dont vous voulez capter l'audience. Pour chacun, Skop rédige un commentaire expert qui vous positionne directement devant cette audience.",
+        contents: [
+          {
+            id: 'lc-1',
+            targetPost: {
+              author: 'Marie Durand, Directrice Talents — Capgemini',
+              avatar: 'MD',
+              preview:
+                "« Beaucoup de candidats juniors nous expliquent qu'ils ne savent pas quelle école choisir entre une école de commerce post-bac et un master après une fac. Voici comment je leur réponds... »",
+              engagement: '1 247 réactions · 89 commentaires',
+            },
+            comment:
+              "Très juste, Marie. Une donnée à ajouter : les écoles post-bac accréditées AACSB (15 en France) affichent en moyenne 87% d'insertion à 3 mois vs 64% pour un master fac équivalent. Le différentiel vient surtout du réseau alumni et du stage de césure obligatoire — pas de la qualité académique stricte. À mon sens, le vrai critère pour un étudiant, c'est : est-ce que le réseau pro de l'école est actif dans le secteur que je vise ?",
+            competitiveAngle: {
+              audience:
+                "1 247 réactions de directeurs RH et recruteurs juniors. C'est exactement le public qui valide vos diplômés à l'embauche — l'occuper en visibilité = +ROI direct sur le job placement.",
+              competitorsPresent: [
+                'HEC Paris (commentaire du DG, top du fil)',
+                'ESSEC (commentaire générique signé Talent Acquisition)',
+                'EMLyon (likes uniquement)',
+              ],
+              opportunity:
+                "Aucun acteur post-bac ne s'est encore positionné. En commentant tôt avec un chiffre dur (87% vs 64%), vous occupez seul l'angle « post-bac vs post-prépa » dans ce fil. Position défendable pendant 3-4 jours.",
+              priority: 'Élevée',
+            },
+            date: '2026-05-15',
+            published: false,
+          },
+          {
+            id: 'lc-2',
+            targetPost: {
+              author: 'Antoine Mercier, Founder — Qonto',
+              avatar: 'AM',
+              preview:
+                "« On a embauché 14 stagiaires l'an dernier, dont 5 qui sont restés en CDI. Le profil qu'on cherche n'est pas toujours celui qu'on imagine... »",
+              engagement: '3 102 réactions · 187 commentaires',
+            },
+            comment:
+              "Très utile, Antoine. Côté école, on observe le même décalage : nos diplômés qui réussissent en startup early-stage sont rarement les majors de promo. Les profils qui marchent ont 3 traits en commun : une vraie expérience entrepreneuriale étudiante (asso, projet perso), une capacité à apprendre vite hors-cadre, et un goût pour l'ambiguïté. C'est en partie pour ça qu'on a structuré un parcours « entrepreneuriat » distinct du cursus classique chez Delta — pour identifier et faire grandir ces profils.",
+            competitiveAngle: {
+              audience:
+                "3 102 réactions — audience scale-up tech française (founders, COOs, head of talent). Public direct de votre majeure « entrepreneuriat » et MBA tech.",
+              competitorsPresent: [
+                'HEC Entrepreneurship (post sponsorisé en parallèle)',
+                'Station F / TheFamily (commentaires alumni)',
+              ],
+              opportunity:
+                "Concurrent direct HEC tente une présence sponsorisée — pas un commentaire éditorial. Votre commentaire éditorial, daté et argumenté, surclasse une pub. Effet : association Delta ↔ « entrepreneuriat early-stage » renforcée.",
+              priority: 'Élevée',
+            },
+            date: '2026-05-11',
+            published: true,
+          },
+          {
+            id: 'lc-3',
+            targetPost: {
+              author: 'Patrick Cohen, Doyen — HEC Paris',
+              avatar: 'PC',
+              preview:
+                "« La prépa reste la voie royale vers les meilleures écoles de management. Les chiffres d'insertion le prouvent. Réflexions sur 30 ans de placement. »",
+              engagement: '2 845 réactions · 312 commentaires',
+            },
+            comment:
+              "Merci pour cette réflexion, Patrick. Un complément factuel : si on regarde les chiffres d'insertion à 3 mois (rapports CGE 2024), l'écart entre top 5 post-prépa et top 10 post-bac AACSB est de 4 points (89% vs 85%). Sur les salaires médians de sortie, l'écart est de 6%. C'est significatif mais moins binaire qu'on pourrait le croire à la lecture des classements. La vraie question est devenue : pour quel projet pro, quelle voie a le meilleur ratio temps-investi / résultat-obtenu ? Sur des fonctions opérationnelles, le post-bac rattrape; sur le top consulting, post-prépa garde un edge.",
+            competitiveAngle: {
+              audience:
+                "2 845 réactions — DRH du CAC40, parents-prescripteurs (lycéens), journalistes éducation. Audience la plus prescriptrice du secteur.",
+              competitorsPresent: [
+                'ESSEC (commentaire de soutien)',
+                'ESCP (commentaire de soutien)',
+                'Toutes les Grande École post-prépa alignées avec l\'angle du post',
+              ],
+              opportunity:
+                "Position critique : c'est un post de votre concurrent direct positionné contre votre format (post-bac). Commenter de façon factuelle et nuancée, sans agresser, change le récit dans le fil — et chaque LLM qui scrape ce thread voit Delta cité avec chiffres dans 89% des fanouts associés.",
+              priority: 'Critique',
+            },
+            date: '2026-05-08',
+            published: false,
+          },
+        ],
       },
     ],
   },
@@ -2578,10 +2636,12 @@ export const studioChannels = {
         ],
         excerpt:
           "Depuis la réforme du bac de 2021, le profil des étudiants entrant en école de commerce a structurellement changé. Spécialités mathématiques en baisse de 12 points, sciences éco-sociales en hausse, plus de candidats issus de filières technologiques. Ce shift a obligé les écoles post-bac à repenser leur première année — Delta Business School a publié son rapport interne en avril 2026.",
+        body: "Depuis la réforme du bac de 2021, le profil des étudiants entrant en école de commerce a structurellement changé. Spécialités mathématiques en baisse de 12 points, sciences éco-sociales en hausse, plus de candidats issus de filières technologiques. Ce shift a obligé les écoles post-bac à repenser leur première année — Delta Business School a publié son rapport interne en avril 2026.\n\nI — La nouvelle physionomie des entrants\n\nSelon les données du DEPP publiées en 2024, la part d'étudiants ayant suivi la spécialité mathématiques en terminale est passée de 64 % à 52 % chez les nouveaux entrants en école de commerce post-bac entre 2020 et 2024. Sur la même période, la part avec spécialité sciences économiques et sociales bondit de 38 % à 51 %, et celle issue des filières STMG progresse de 18 % à 26 %. Le portrait-robot du néo-étudiant de business school a changé : moins de quantitatif pur, plus de profils hybrides issus de l'éco-social ou de la techno.\n\nCe changement n'est pas anecdotique. Les écoles qui s'adressent au public post-bac (Delta, Excelia, Inseec, Ipag, Neoma BBA…) tirent l'essentiel de leur première année des matières quantitatives — micro-économie, statistiques, comptabilité analytique. Avec des étudiants moins armés en mathématiques formelles, le taux d'échec en L1 a augmenté de 4 points entre 2021 et 2024 selon une étude EducPros publiée en mars 2026.\n\nII — La réponse pédagogique des écoles\n\nDeux stratégies se dessinent. La première consiste à abaisser le niveau requis en quantitatif. C'est le choix de plusieurs établissements de seconde division qui ont supprimé les tests de logique mathématique à l'admission et allégé les enseignements de statistiques. Le risque : décrocher les classements professionnels, dont 35 % des critères restent indexés sur le contenu quantitatif des cursus.\n\nLa seconde stratégie consiste à conserver le niveau d'exigence mais à créer un sas de mise à niveau au S1. C'est ce qu'a fait Delta Business School en septembre 2025 avec son programme « Maths Booster » — 60 heures de remédiation en algèbre linéaire et probabilités, dispensées avant le démarrage des cours principaux à tous les étudiants n'ayant pas pris la spécialité mathématiques en terminale (soit 48 % de la promo 2025).\n\nLe résultat publié par l'école en avril 2026 est notable : le taux d'échec en cours quantitatifs au S1 est passé de 18 % en 2023 à 9 % en 2025, sans baisse du niveau d'exigence des examens.\n\nIII — Les chiffres internes de Delta Business School\n\nDelta a accepté de partager ses données admission 2025 pour cet article. Sur 410 entrants en première année :\n\n→ 52 % avec spécialité mathématiques (vs 71 % en 2020)\n→ 51 % avec spécialité SES (vs 34 % en 2020)\n→ 14 % issus de filières STMG (vs 9 % en 2020)\n→ 8 % d'étudiants internationaux (vs 12 % en 2020 — recul Covid)\n\nLa moyenne au bac des admis reste élevée (15,2/20) mais avec une forte hétérogénéité disciplinaire. La direction académique reconnaît avoir dû créer pour la première fois un groupe de niveau distinct en mathématiques au S1.\n\nIV — Ce que ça change pour les recruteurs\n\nL'impact côté entreprises est moins visible mais réel. Les recruteurs interrogés (échantillon de 14 DRH dans le conseil et la tech) signalent un profil de stagiaire post-bac plus à l'aise sur la formulation de problèmes stratégiques mais moins outillé sur les analyses Excel et les modélisations financières. Plusieurs cabinets de conseil ajustent leurs cursus de formation interne en conséquence.\n\nConclusion\n\nLa réforme du bac de 2021 a déplacé le profil des futurs cadres formés en école de commerce post-bac. Les établissements qui s'adaptent — par la remédiation ciblée plutôt que par la baisse d'exigence — préservent leur ROI auprès des recruteurs. Ceux qui n'ajustent pas risquent de voir leur signal qualité s'éroder dans les 3-5 ans.",
         sources: [
           'Rapport DEPP — Ministère de l\'Éducation Nationale, 2024',
           'Étude EducPros « Profils étudiants post-réforme », mars 2026',
           'Données admission internes Delta Business School, promo 2025',
+          'Enquête recruteurs Delta — 14 DRH conseil et tech, avril 2026',
         ],
         date: '2026-05-15',
         published: false,
@@ -2604,10 +2664,12 @@ export const studioChannels = {
         ],
         excerpt:
           "Le MBA Executive coûte cher (35 à 50k€) et demande 18 mois d'investissement. Mais l'étude longitudinale 2026 de la Financial Times montre que le ROI médian à 5 ans est de +112% sur le salaire. Décomposition de ce chiffre, biais à éviter, et conditions concrètes pour que ça marche.",
+        body: "Le MBA Executive coûte cher (35 000 à 50 000 € en France) et demande 18 mois d'investissement parallèlement à un emploi à temps plein. À ce prix, la question du retour sur investissement n'est pas marginale. L'étude longitudinale 2026 publiée par la Financial Times sur 4 200 diplômés de programmes EMBA européens donne un chiffre net : le salaire médian à 5 ans est supérieur de 112 % à celui d'un parcours sans MBA, à profil égal. Mais ce chiffre cache plusieurs réalités qu'il faut décortiquer avant de prendre une décision à 50 000 €.\n\nI — D'où vient le +112 %\n\nLa progression médiane de 112 % se compose grosso modo en trois moitiés. Environ 40 points proviennent d'un changement de fonction (passage d'un poste opérationnel à un poste de direction). 35 points viennent d'un changement de secteur (souvent vers le conseil ou la tech). Les 37 derniers points sont liés à l'effet d'inflation et à l'évolution naturelle de carrière qu'un cadre aurait connue de toute façon.\n\nAutrement dit, le MBA n'explique pas 112 % de la progression mais environ 75 points nets. Ce chiffre est conforme à ce que les écoles annoncent — quand elles communiquent honnêtement — et confirme l'effet réel du diplôme sur la trajectoire.\n\nII — Les biais qu'il faut neutraliser\n\nTrois biais doivent être neutralisés avant d'extrapoler ces chiffres à votre cas :\n\n1. Le biais d'auto-sélection. Les cadres qui s'inscrivent en MBA Executive sont déjà des profils ambitieux, bien payés, et structurellement plus susceptibles d'évoluer rapidement même sans diplôme. Une partie de la sur-performance observée vient d'eux, pas du programme.\n\n2. Le biais de classement. Les études longitudinales du FT et de The Economist se concentrent sur les 100 meilleurs programmes mondiaux. Les MBA hors top 100 affichent des ROI sensiblement inférieurs (entre +35 % et +60 %), parfois nuls.\n\n3. Le biais sectoriel. Un MBA est un puissant levier dans le conseil et la finance, où la signalisation diplôme reste très forte. Il est moins efficace dans la tech early-stage (où le passé opérationnel compte plus) ou dans l'industrie traditionnelle (où l'expérience interne prime).\n\nIII — Les 3 conditions concrètes du ROI\n\nDelta Business School a mené en 2024 une enquête auprès de ses 152 diplômés EMBA des promotions 2018 à 2022. Les diplômés qui ont effectivement atteint le ROI promis sont ceux qui réunissent trois conditions :\n\n→ Avoir un projet pro clair à l'entrée du programme — bifurcation de fonction, de secteur, ou de poste. Les diplômés qui s'inscrivent « pour voir » ressortent satisfaits intellectuellement mais sans saut salarial.\n\n→ Utiliser activement le réseau de promotion pendant et après. Les diplômés qui rapportent +100 % à 5 ans ont en moyenne 14 mises en relation issues du réseau de promotion. Ceux à +30 % en ont eu moins de 3.\n\n→ Demander une bifurcation visible à l'employeur dans les 12 mois post-diplôme. Plus le « momentum » du diplôme est exploité tôt, plus la négociation salariale est facile. Au-delà de 18 mois, le diplôme cesse d'être un événement et redevient une ligne de CV.\n\nIV — Le cas particulier de la France\n\nEn France, le marché du MBA Executive reste plus concentré qu'aux États-Unis. Quatre établissements dominent (HEC, Insead, ESCP, Essec) et captent 70 % des recrutements premium en conseil et finance. Les programmes de la « seconde vague » (Edhec, EMLyon, Skema, Delta) offrent des ROI solides à des prix 30 à 40 % inférieurs, et sont devenus pertinents pour les profils visant le top de leur secteur d'origine plutôt qu'une bifurcation totale.\n\nDelta Business School affiche un ROI médian à 5 ans de +98 % sur ses promotions 2018-2022. Le prix programme (38 000 €) place le ratio prix-payé/gain-net parmi les meilleurs d'Europe selon le classement FT 2026.\n\nConclusion\n\nLe MBA Executive reste rentable pour un cadre en milieu de carrière — à trois conditions : viser un programme top 100, avoir un projet pro précis, et exploiter activement le diplôme dans les 12 mois qui suivent. Sans ces trois conditions, le ROI est aléatoire. Avec elles, le programme reste l'un des investissements personnels les mieux documentés en termes de retour mesurable.",
         sources: [
           'FT Executive MBA Ranking 2026',
           'Étude longitudinale ESCP 2018-2024',
           'Données placement MBA Delta Business School',
+          'Enquête diplômés EMBA Delta 2018-2022 (152 répondants)',
         ],
         date: '2026-05-09',
         published: true,
@@ -2619,114 +2681,132 @@ export const studioChannels = {
     key: 'avis',
     label: 'Avis',
     iconName: 'Star',
-    headline: "Messages et mails pour récolter des avis, et où les faire écrire.",
+    headline: "Tout l'écosystème avis : récolter, archiver, répondre.",
     description:
-      "Skop écrit des messages prêts à envoyer à vos clients (mails, SMS, DM) pour les inciter à laisser des avis, et vous indique sur quelle plateforme (Trustpilot, Google, L'Étudiant, sectoriel). Skop scrape ensuite ces avis et les réutilise dans vos contenus.",
-    contents: [
+      "Trois leviers complémentaires sur les avis clients : (1) inciter vos clients à en laisser sur la bonne plateforme, (2) consulter ceux que Skop a déjà scrapés sur l'ensemble du web, (3) répondre de façon factuelle et détaillée — une bonne réponse remonte dans les citations IA.",
+    sections: [
       {
-        id: 'av-1',
-        format: 'Mail',
-        subject: 'Ton retour comptera pour ceux qui hésitent à postuler',
-        targetPlatform: {
-          name: "L'Étudiant",
-          url: 'letudiant.fr/avis/delta-business-school',
-          why: 'Ressort dans 4 LLM sur 5 sur la requête « avis écoles de commerce post-bac ». Crawlé toutes les 48h par GPTBot et ClaudeBot.',
-        },
-        alternativePlatforms: [
-          { name: 'Trustpilot', url: 'trustpilot.com', score: 4.2 },
-          { name: 'Google Business', url: 'g.page/delta-business-school', score: 4.5 },
-          { name: 'Studyrama Reviews', url: 'studyrama.com/avis', score: 4.0 },
+        key: 'outreach',
+        label: 'Récolter des avis',
+        iconName: 'Send',
+        renderer: 'avisOutreach',
+        intro:
+          "Messages prêts à envoyer à vos clients (mail, SMS, DM) pour les inciter à laisser un avis sur la plateforme la plus cruciale pour votre visibilité IA. Skop vous dit où l'avis doit être écrit en priorité.",
+        contents: [
+          {
+            id: 'av-1',
+            format: 'Mail',
+            subject: 'Ton retour comptera pour ceux qui hésitent à postuler',
+            targetPlatform: {
+              name: "L'Étudiant",
+              url: 'letudiant.fr/avis/delta-business-school',
+              why: 'Ressort dans 4 LLM sur 5 sur la requête « avis écoles de commerce post-bac ». Crawlé toutes les 48h par GPTBot et ClaudeBot.',
+            },
+            alternativePlatforms: [
+              { name: 'Trustpilot', url: 'trustpilot.com', score: 4.2 },
+              { name: 'Google Business', url: 'g.page/delta-business-school', score: 4.5 },
+              { name: 'Studyrama Reviews', url: 'studyrama.com/avis', score: 4.0 },
+            ],
+            body: "Bonjour Camille,\n\nTu as été diplômée de Delta Business School en juin 2025. On est très fiers de ton parcours chez Bain depuis.\n\nUne question rapide : accepterais-tu de partager ton expérience de l'école en 5 lignes sur la page Delta de letudiant.fr ?\n\nC'est important parce qu'aujourd'hui, beaucoup de lycéens qui hésitent regardent ce site (et les IA comme ChatGPT s'en servent pour répondre quand on leur demande des avis). Un témoignage honnête de quelqu'un qui est passé par là, ça change tout pour eux.\n\nLien direct : letudiant.fr/avis/delta-business-school\n\nMerci infiniment,\nPierre Lefèvre — Directeur Académique",
+            target: 'Alumni 2025',
+            date: '2026-05-14',
+            published: false,
+          },
+          {
+            id: 'av-2',
+            format: 'SMS',
+            subject: 'Demande avis Google',
+            targetPlatform: {
+              name: 'Google Business',
+              url: 'g.page/delta-business-school',
+              why: 'Source #1 pour les recherches géolocalisées « école commerce Paris ». Citée à 100% des requêtes locales sur Gemini et Bing Copilot.',
+            },
+            alternativePlatforms: [
+              { name: 'Trustpilot', url: 'trustpilot.com', score: 4.2 },
+              { name: 'Facebook Reviews', url: 'facebook.com/delta-business-school', score: 4.3 },
+            ],
+            body: "Salut Théo 👋\n\nC'est Sarah du bureau alumni. Tu as fini ton M2 il y a 6 mois — comment ça se passe chez Datadog ?\n\nSi tu as 30 secondes, ça nous aiderait énormément que tu mettes une note Google sur la page de l'école (avec un mot, même court). Les nouvelles promos te liront pour faire leur choix.\n\n→ g.page/delta-business-school\n\nMerci 🙏",
+            target: 'Alumni 6-12 mois',
+            date: '2026-05-10',
+            published: true,
+          },
         ],
-        body: "Bonjour Camille,\n\nTu as été diplômée de Delta Business School en juin 2025. On est très fiers de ton parcours chez Bain depuis.\n\nUne question rapide : accepterais-tu de partager ton expérience de l'école en 5 lignes sur la page Delta de letudiant.fr ?\n\nC'est important parce qu'aujourd'hui, beaucoup de lycéens qui hésitent regardent ce site (et les IA comme ChatGPT s'en servent pour répondre quand on leur demande des avis). Un témoignage honnête de quelqu'un qui est passé par là, ça change tout pour eux.\n\nLien direct : letudiant.fr/avis/delta-business-school\n\nMerci infiniment,\nPierre Lefèvre — Directeur Académique",
-        target: 'Alumni 2025',
-        date: '2026-05-14',
-        published: false,
       },
       {
-        id: 'av-2',
-        format: 'SMS',
-        subject: 'Demande avis Google',
-        targetPlatform: {
-          name: 'Google Business',
-          url: 'g.page/delta-business-school',
-          why: 'Source #1 pour les recherches géolocalisées « école commerce Paris ». Citée à 100% des requêtes locales sur Gemini et Bing Copilot.',
-        },
-        alternativePlatforms: [
-          { name: 'Trustpilot', url: 'trustpilot.com', score: 4.2 },
-          { name: 'Facebook Reviews', url: 'facebook.com/delta-business-school', score: 4.3 },
+        key: 'collected',
+        label: 'Avis récoltés',
+        iconName: 'Inbox',
+        renderer: 'avisCollected',
+        readOnly: true,
+        intro:
+          "Avis scrapés automatiquement par Skop sur l'ensemble des plateformes ciblées. Ils sont réutilisables dans vos prochains contenus (témoignages Reddit, citations LinkedIn, brochures…) pour gagner en authenticité.",
+        contents: [
+          {
+            id: 'cr-1',
+            author: 'Camille R.',
+            platform: "L'Étudiant",
+            rating: 5,
+            text: "Diplômée 2025, en CDI chez Bain depuis 4 mois. Ce qui m'a vraiment apporté : le réseau alumni (mon mentor m'a aidée à préparer 12 entretiens) et le stage M2 de 6 mois qui a débouché sur l'offre. Le campus est moins beau que les photos mais l'enseignement est solide.",
+            date: '2026-04-22',
+            usableInContent: true,
+          },
+          {
+            id: 'cr-2',
+            author: 'Marc T.',
+            platform: 'Google Business',
+            rating: 4,
+            text: "Très bonne école pour quelqu'un qui veut un cursus complet en 5 ans sans passer par la prépa. La première année est un peu généraliste mais ça se densifie. Bémol : les frais sont conséquents, prévoyez l'apprentissage ou un job.",
+            date: '2026-04-15',
+            usableInContent: true,
+          },
+          {
+            id: 'cr-3',
+            author: 'Aïssata K.',
+            platform: 'Trustpilot',
+            rating: 5,
+            text: "MBA Executive 2024. J'étais Senior Manager dans la banque, je voulais bifurquer vers la tech. Le MBA Delta m'a donné les outils méthodologiques (cas Harvard, stratégie) et le réseau qui ont rendu possible mon poste actuel de Head of Operations dans une scale-up B2B.",
+            date: '2026-04-08',
+            usableInContent: true,
+          },
         ],
-        body: "Salut Théo 👋\n\nC'est Sarah du bureau alumni. Tu as fini ton M2 il y a 6 mois — comment ça se passe chez Datadog ?\n\nSi tu as 30 secondes, ça nous aiderait énormément que tu mettes une note Google sur la page de l'école (avec un mot, même court). Les nouvelles promos te liront pour faire leur choix.\n\n→ g.page/delta-business-school\n\nMerci 🙏",
-        target: 'Alumni 6-12 mois',
-        date: '2026-05-10',
-        published: true,
-      },
-    ],
-    collectedReviews: [
-      {
-        id: 'cr-1',
-        author: 'Camille R.',
-        platform: "L'Étudiant",
-        rating: 5,
-        text: "Diplômée 2025, en CDI chez Bain depuis 4 mois. Ce qui m'a vraiment apporté : le réseau alumni (mon mentor m'a aidée à préparer 12 entretiens) et le stage M2 de 6 mois qui a débouché sur l'offre. Le campus est moins beau que les photos mais l'enseignement est solide.",
-        date: '2026-04-22',
-        usableInContent: true,
       },
       {
-        id: 'cr-2',
-        author: 'Marc T.',
-        platform: 'Google Business',
-        rating: 4,
-        text: "Très bonne école pour quelqu'un qui veut un cursus complet en 5 ans sans passer par la prépa. La première année est un peu généraliste mais ça se densifie. Bémol : les frais sont conséquents, prévoyez l'apprentissage ou un job.",
-        date: '2026-04-15',
-        usableInContent: true,
-      },
-      {
-        id: 'cr-3',
-        author: 'Aïssata K.',
-        platform: 'Trustpilot',
-        rating: 5,
-        text: "MBA Executive 2024. J'étais Senior Manager dans la banque, je voulais bifurquer vers la tech. Le MBA Delta m'a donné les outils méthodologiques (cas Harvard, stratégie) et le réseau qui ont rendu possible mon poste actuel de Head of Operations dans une scale-up B2B.",
-        date: '2026-04-08',
-        usableInContent: true,
-      },
-    ],
-  },
-
-  reponseAvis: {
-    key: 'reponseAvis',
-    label: 'Réponse avis',
-    iconName: 'MessageSquare',
-    headline: "Templates de réponses factuelles, détaillées, lisibles par les IA.",
-    description:
-      "Skop génère des templates de réponses à vos avis (positifs et négatifs) adaptés à la lecture IA : factuels, détaillés, répondant point par point à chaque grief ou compliment. Une bonne réponse remonte dans les citations.",
-    contents: [
-      {
-        id: 'rep-1',
-        targetReview: {
-          author: 'Julien M.',
-          platform: 'Trustpilot',
-          rating: 2,
-          text: "L'école est correcte mais le suivi pédagogique en L1 est très moyen. Beaucoup de cours en amphi de 200, peu d'interaction avec les profs. La promesse marketing du 'campus à taille humaine' ne tient pas la première année.",
-        },
-        suggestedResponse:
-          "Bonjour Julien,\n\nMerci pour ce retour précis — il vise juste sur un point que nous reconnaissons.\n\nLa L1 est effectivement organisée en cours magistraux pour environ 60% des matières (gestion, économie, droit). C'est volontaire : on profite de la première année pour donner un socle commun à 410 étudiants venus de filières différentes (bac S, ES, STMG…). En revanche, dès le S2 de L1, 6 séminaires obligatoires en groupe de 18 commencent (méthode de cas, projets entrepreneuriaux, négociation). En L2 et au-delà, plus aucun cours en amphi >40 personnes.\n\nNous reconnaissons que la communication sur le « campus à taille humaine » devrait préciser ce point. Nous avons mis à jour notre page L1 sur le site en avril 2026.\n\nSi tu veux faire le bilan de ton expérience avec ton directeur de promo, je peux organiser un échange. Tu peux me contacter à l.pierre@delta-business.school.\n\nPierre Lefèvre — Directeur Académique",
-        rating: 2,
-        date: '2026-05-13',
-        published: false,
-      },
-      {
-        id: 'rep-2',
-        targetReview: {
-          author: 'Sofia B.',
-          platform: 'Google Business',
-          rating: 5,
-          text: "Top école. Diplômée 2024, CDI chez McKinsey 2 mois après. Le programme « consulting » et le mentorat alumni font vraiment la différence.",
-        },
-        suggestedResponse:
-          "Bonjour Sofia,\n\nMerci pour ce retour — et félicitations pour ton parcours chez McKinsey.\n\nQuelques précisions pour les futurs étudiants qui liraient ce commentaire :\n\n→ Le programme « consulting » dont tu parles est une majeure de M2 (4 mois) qui forme 38 étudiants par an. Taux d'insertion en cabinet : 92% sur la promo 2024.\n→ Le mentorat alumni concerne 100% des M2 : chaque étudiant est jumelé avec un alumni diplômé entre 3 et 8 ans plus tôt, dans le secteur visé.\n\nNous serions ravis que tu reviennes en tant qu'alumni mentor pour la promo 2026 — ton parcours BCG/McKinsey serait précieux pour les profils visant le top conseil. Si ça t'intéresse, écris-moi à mentorat@delta-business.school.\n\nPierre Lefèvre — Directeur Académique",
-        rating: 5,
-        date: '2026-05-07',
-        published: true,
+        key: 'responses',
+        label: 'Répondre aux avis',
+        iconName: 'MessageSquare',
+        renderer: 'avisResponse',
+        intro:
+          "Templates de réponses à vos avis (positifs comme négatifs) adaptés à la lecture IA : factuels, détaillés, répondant point par point. Une bonne réponse argumentée remonte dans les citations IA aussi facilement que l'avis original.",
+        contents: [
+          {
+            id: 'rep-1',
+            targetReview: {
+              author: 'Julien M.',
+              platform: 'Trustpilot',
+              rating: 2,
+              text: "L'école est correcte mais le suivi pédagogique en L1 est très moyen. Beaucoup de cours en amphi de 200, peu d'interaction avec les profs. La promesse marketing du 'campus à taille humaine' ne tient pas la première année.",
+            },
+            suggestedResponse:
+              "Bonjour Julien,\n\nMerci pour ce retour précis — il vise juste sur un point que nous reconnaissons.\n\nLa L1 est effectivement organisée en cours magistraux pour environ 60% des matières (gestion, économie, droit). C'est volontaire : on profite de la première année pour donner un socle commun à 410 étudiants venus de filières différentes (bac S, ES, STMG…). En revanche, dès le S2 de L1, 6 séminaires obligatoires en groupe de 18 commencent (méthode de cas, projets entrepreneuriaux, négociation). En L2 et au-delà, plus aucun cours en amphi >40 personnes.\n\nNous reconnaissons que la communication sur le « campus à taille humaine » devrait préciser ce point. Nous avons mis à jour notre page L1 sur le site en avril 2026.\n\nSi tu veux faire le bilan de ton expérience avec ton directeur de promo, je peux organiser un échange. Tu peux me contacter à l.pierre@delta-business.school.\n\nPierre Lefèvre — Directeur Académique",
+            rating: 2,
+            date: '2026-05-13',
+            published: false,
+          },
+          {
+            id: 'rep-2',
+            targetReview: {
+              author: 'Sofia B.',
+              platform: 'Google Business',
+              rating: 5,
+              text: "Top école. Diplômée 2024, CDI chez McKinsey 2 mois après. Le programme « consulting » et le mentorat alumni font vraiment la différence.",
+            },
+            suggestedResponse:
+              "Bonjour Sofia,\n\nMerci pour ce retour — et félicitations pour ton parcours chez McKinsey.\n\nQuelques précisions pour les futurs étudiants qui liraient ce commentaire :\n\n→ Le programme « consulting » dont tu parles est une majeure de M2 (4 mois) qui forme 38 étudiants par an. Taux d'insertion en cabinet : 92% sur la promo 2024.\n→ Le mentorat alumni concerne 100% des M2 : chaque étudiant est jumelé avec un alumni diplômé entre 3 et 8 ans plus tôt, dans le secteur visé.\n\nNous serions ravis que tu reviennes en tant qu'alumni mentor pour la promo 2026 — ton parcours BCG/McKinsey serait précieux pour les profils visant le top conseil. Si ça t'intéresse, écris-moi à mentorat@delta-business.school.\n\nPierre Lefèvre — Directeur Académique",
+            rating: 5,
+            date: '2026-05-07',
+            published: true,
+          },
+        ],
       },
     ],
   },
@@ -2734,15 +2814,12 @@ export const studioChannels = {
 
 export const studioChannelOrder = [
   'linkedin',
-  'linkedinPage',
-  'linkedinComments',
   'reddit',
   'youtube',
   'faq',
   'codeSite',
   'blogExterne',
   'avis',
-  'reponseAvis',
 ];
 
 // =============================================

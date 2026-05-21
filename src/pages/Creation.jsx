@@ -6,11 +6,31 @@ import { useToast } from '../components/ToastProvider.jsx';
 import { studioChannels, studioChannelOrder } from '../data/mockData.js';
 
 /**
- * Page Studio (route /creation) — hub de création multi-canal.
- * 10 canaux : LinkedIn, LinkedIn Page, LinkedIn Commentaires, Reddit,
- * YouTube, FAQ, Code site, Blog externe, Avis, Réponse avis.
- * Chaque contenu peut être marqué « publié » via une case à cocher.
+ * Page Studio (route /creation) — hub de création multi-canal (7 canaux).
+ * LinkedIn et Avis sont des canaux composites (plusieurs sections par canal).
+ * Chaque contenu peut être marqué « publié » et copié dans le presse-papier.
  */
+
+// Pour les canaux non-composites, on map channelKey → renderer
+const CHANNEL_RENDERER = {
+  reddit: 'redditPost',
+  youtube: 'youtubeScript',
+  faq: 'faqQuestion',
+  codeSite: 'codeSiteImprovement',
+  blogExterne: 'blogArticle',
+};
+
+// Récupère le tableau plat de tous les contenus marquables « publié »
+// (exclut les sections readOnly comme les avis récoltés).
+const allPublishableContents = (channel) => {
+  if (channel.sections) {
+    return channel.sections
+      .filter((s) => !s.readOnly)
+      .flatMap((s) => s.contents);
+  }
+  return channel.contents || [];
+};
+
 export default function Creation() {
   const [searchParams, setSearchParams] = useSearchParams();
   const rawChannel = searchParams.get('channel');
@@ -20,11 +40,11 @@ export default function Creation() {
   const toast = useToast();
   const channel = studioChannels[channelKey];
 
-  // État local : map { contentId → bool publié }, initialisé depuis le mock.
+  // État local : map { contentId → bool publié }
   const [publishedMap, setPublishedMap] = useState(() => {
     const m = {};
     studioChannelOrder.forEach((k) => {
-      (studioChannels[k].contents || []).forEach((c) => {
+      allPublishableContents(studioChannels[k]).forEach((c) => {
         m[c.id] = !!c.published;
       });
     });
@@ -91,78 +111,100 @@ export default function Creation() {
         </div>
       </Card>
 
-      {/* ─── Liste des contenus du canal ─── */}
-      <div className="space-y-4">
-        {channel.contents.map((content) => (
-          <ContentCard
-            key={content.id}
-            content={content}
-            channelKey={channelKey}
-            isPublished={publishedMap[content.id]}
-            onTogglePublished={() => togglePublished(content.id)}
-          />
-        ))}
-      </div>
-
-      {/* ─── Section additionnelle pour Avis : avis récoltés ─── */}
-      {channelKey === 'avis' && channel.collectedReviews && (
-        <Card
-          title={
-            <span className="inline-flex items-center gap-1.5">
-              <Icon name="Inbox" size={16} className="text-skop-pink-vivid" />
-              Avis récoltés (scrapés par Skop)
-            </span>
-          }
-          subtitle={`${channel.collectedReviews.length} avis exploitables dans vos prochains contenus`}
-        >
-          <div className="space-y-3">
-            {channel.collectedReviews.map((r) => (
-              <div
-                key={r.id}
-                className="p-3 rounded-skop border border-skop-gray-200 bg-white"
-              >
-                <div className="flex items-center gap-2 flex-wrap mb-2">
-                  <span className="font-semibold text-sm text-skop-black">{r.author}</span>
-                  <span className="text-[11px] text-skop-gray-500">·</span>
-                  <span className="text-[11px] text-skop-gray-500">{r.platform}</span>
-                  <span className="text-[11px] text-skop-gray-500">·</span>
-                  <span className="text-[11px] text-skop-pink-vivid font-bold">
-                    {'★'.repeat(r.rating)}
-                  </span>
-                  <span className="text-[11px] text-skop-gray-400 ml-auto">{r.date}</span>
-                </div>
-                <p className="text-sm text-skop-gray-700 leading-relaxed">« {r.text} »</p>
-              </div>
-            ))}
-          </div>
-        </Card>
+      {/* ─── Rendu : sections composites OU liste simple ─── */}
+      {channel.sections ? (
+        <div className="space-y-10">
+          {channel.sections.map((section) => (
+            <SectionBlock
+              key={section.key}
+              section={section}
+              publishedMap={publishedMap}
+              togglePublished={togglePublished}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {channel.contents.map((content) => (
+            <ContentCard
+              key={content.id}
+              content={content}
+              renderer={CHANNEL_RENDERER[channelKey]}
+              isPublished={publishedMap[content.id]}
+              onTogglePublished={() => togglePublished(content.id)}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
 }
 
 // ════════════════════════════════════════
-// CONTENT CARD — dispatch par canal
+// SECTION (canaux composites : LinkedIn, Avis)
 // ════════════════════════════════════════
-function ContentCard({ content, channelKey, isPublished, onTogglePublished }) {
+function SectionBlock({ section, publishedMap, togglePublished }) {
+  return (
+    <section>
+      {/* En-tête de section : titre + intro pédagogique */}
+      <div className="mb-4 flex items-start gap-3">
+        <span className="w-9 h-9 rounded-skop bg-skop-pink-soft border border-skop-pink flex items-center justify-center shrink-0 mt-0.5">
+          <Icon name={section.iconName} size={16} className="text-skop-pink-vivid" />
+        </span>
+        <div className="flex-1">
+          <h3 className="font-title text-lg font-bold text-skop-black leading-tight">
+            {section.label}
+          </h3>
+          <p className="text-xs text-skop-gray-600 mt-1 leading-relaxed max-w-3xl">
+            {section.intro}
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-4 pl-12">
+        {section.contents.map((content) => (
+          <ContentCard
+            key={content.id}
+            content={content}
+            renderer={section.renderer}
+            readOnly={section.readOnly}
+            isPublished={publishedMap[content.id]}
+            onTogglePublished={() => togglePublished(content.id)}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ════════════════════════════════════════
+// CONTENT CARD — header (checkbox + copy) + body (dispatch renderer)
+// ════════════════════════════════════════
+function ContentCard({ content, renderer, isPublished, onTogglePublished, readOnly }) {
   return (
     <div
       className={`rounded-skop border overflow-hidden transition ${
-        isPublished
+        isPublished && !readOnly
           ? 'border-skop-gray-200 bg-skop-gray-50/60'
           : 'border-skop-gray-200 bg-white'
       }`}
     >
-      {/* Header : checkbox publié + date */}
       <div className="flex items-center justify-between gap-3 px-5 py-3 border-b border-skop-gray-100">
-        <PublishedCheckbox checked={isPublished} onChange={onTogglePublished} />
-        <span className="text-[11px] text-skop-gray-500">{content.date}</span>
+        {readOnly ? (
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-skop-gray-500">
+            <Icon name="Inbox" size={13} className="text-skop-pink-vivid" />
+            Avis récolté
+          </span>
+        ) : (
+          <PublishedCheckbox checked={isPublished} onChange={onTogglePublished} />
+        )}
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] text-skop-gray-500">{content.date}</span>
+          <CopyButton content={content} renderer={renderer} />
+        </div>
       </div>
 
-      {/* Body : contenu spécifique au canal */}
-      <div className="p-5 space-y-3">
-        {renderChannelBody(channelKey, content)}
-      </div>
+      <div className="p-5 space-y-3">{renderChannelBody(renderer, content)}</div>
     </div>
   );
 }
@@ -179,12 +221,7 @@ function PublishedCheckbox({ checked, onChange }) {
       >
         {checked && <Icon name="Check" size={13} className="text-skop-black" />}
       </span>
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={onChange}
-        className="sr-only"
-      />
+      <input type="checkbox" checked={checked} onChange={onChange} className="sr-only" />
       <span
         className={`text-xs font-bold uppercase tracking-wide transition ${
           checked ? 'text-skop-black' : 'text-skop-gray-500'
@@ -197,30 +234,100 @@ function PublishedCheckbox({ checked, onChange }) {
 }
 
 // ════════════════════════════════════════
-// DISPATCH PAR CANAL
+// COPY BUTTON
 // ════════════════════════════════════════
-function renderChannelBody(channelKey, c) {
-  switch (channelKey) {
-    case 'linkedin':
+function getCopyText(content, renderer) {
+  switch (renderer) {
+    case 'linkedinPost':
+    case 'linkedinPageImprovement':
+    case 'redditPost':
+    case 'avisOutreach':
+      return content.body || '';
+    case 'linkedinComment':
+      return content.comment || '';
+    case 'youtubeScript':
+      return [
+        content.title,
+        '',
+        content.description,
+        '',
+        'Chapitrage :',
+        ...(content.chapters || []),
+      ].join('\n');
+    case 'faqQuestion':
+      return `Q : ${content.question}\n\nR : ${content.answer}`;
+    case 'codeSiteImprovement':
+      return content.suggestedCode || '';
+    case 'blogArticle':
+      return content.body || content.excerpt || '';
+    case 'avisCollected':
+      return content.text || '';
+    case 'avisResponse':
+      return content.suggestedResponse || '';
+    default:
+      return '';
+  }
+}
+
+function CopyButton({ content, renderer }) {
+  const toast = useToast();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    const text = getCopyText(content, renderer);
+    if (!text) {
+      toast('Rien à copier', { icon: '!' });
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      toast('Copié dans le presse-papier', { icon: '📋' });
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      toast('Copie impossible', { icon: '!' });
+    }
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      title="Copier le contenu"
+      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white border border-skop-gray-200 text-[11px] font-semibold text-skop-gray-700 hover:border-skop-pink-vivid hover:text-skop-pink-vivid transition"
+    >
+      <Icon name={copied ? 'Check' : 'Copy'} size={12} />
+      {copied ? 'Copié' : 'Copier'}
+    </button>
+  );
+}
+
+// ════════════════════════════════════════
+// DISPATCH PAR RENDERER
+// ════════════════════════════════════════
+function renderChannelBody(renderer, c) {
+  switch (renderer) {
+    case 'linkedinPost':
       return <LinkedInPost c={c} />;
-    case 'linkedinPage':
+    case 'linkedinPageImprovement':
       return <LinkedInPageImprovement c={c} />;
-    case 'linkedinComments':
+    case 'linkedinComment':
       return <LinkedInComment c={c} />;
-    case 'reddit':
+    case 'redditPost':
       return <RedditPost c={c} />;
-    case 'youtube':
+    case 'youtubeScript':
       return <YouTubeScript c={c} />;
-    case 'faq':
+    case 'faqQuestion':
       return <FaqQuestion c={c} />;
-    case 'codeSite':
+    case 'codeSiteImprovement':
       return <CodeSiteImprovement c={c} />;
-    case 'blogExterne':
+    case 'blogArticle':
       return <BlogArticle c={c} />;
-    case 'avis':
-      return <AvisMessage c={c} />;
-    case 'reponseAvis':
-      return <ReviewResponse c={c} />;
+    case 'avisOutreach':
+      return <AvisOutreach c={c} />;
+    case 'avisCollected':
+      return <AvisCollected c={c} />;
+    case 'avisResponse':
+      return <AvisResponse c={c} />;
     default:
       return null;
   }
@@ -281,6 +388,14 @@ function LinkedInPageImprovement({ c }) {
 
 // ────────────────────────────────────────
 function LinkedInComment({ c }) {
+  const angle = c.competitiveAngle;
+  const priorityColor =
+    angle?.priority === 'Critique'
+      ? 'bg-skop-pink-vivid text-white'
+      : angle?.priority === 'Élevée'
+      ? 'bg-skop-pink-soft text-skop-pink-vivid border border-skop-pink-vivid'
+      : 'bg-skop-gray-100 text-skop-gray-700';
+
   return (
     <>
       {/* Post cible */}
@@ -299,6 +414,50 @@ function LinkedInComment({ c }) {
         </div>
         <p className="text-xs text-skop-gray-700 italic leading-relaxed">{c.targetPost.preview}</p>
       </div>
+
+      {/* Bloc concurrence — mis en avant */}
+      {angle && (
+        <div className="rounded-skop border-l-4 border-l-skop-pink-vivid border-y border-r border-skop-gray-200 bg-white p-3 space-y-2.5">
+          <div className="flex items-center gap-2">
+            <Icon name="Swords" size={13} className="text-skop-pink-vivid" />
+            <p className="text-[10px] font-bold uppercase tracking-wide text-skop-pink-vivid">
+              Angle concurrence
+            </p>
+            {angle.priority && (
+              <span className={`ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${priorityColor}`}>
+                Priorité {angle.priority}
+              </span>
+            )}
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wide text-skop-gray-400 mb-0.5">
+              Audience captée
+            </p>
+            <p className="text-xs text-skop-gray-700 leading-relaxed">{angle.audience}</p>
+          </div>
+          {angle.competitorsPresent && angle.competitorsPresent.length > 0 && (
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wide text-skop-gray-400 mb-1">
+                Concurrents déjà présents dans le fil
+              </p>
+              <ul className="space-y-0.5">
+                {angle.competitorsPresent.map((co, i) => (
+                  <li key={i} className="text-xs text-skop-black flex items-start gap-1.5">
+                    <span className="text-skop-pink-vivid mt-0.5">→</span>
+                    <span>{co}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wide text-skop-gray-400 mb-0.5">
+              Opportunité
+            </p>
+            <p className="text-xs text-skop-black leading-relaxed">{angle.opportunity}</p>
+          </div>
+        </div>
+      )}
 
       {/* Commentaire à poster */}
       <p className="text-[10px] font-bold uppercase tracking-wide text-skop-gray-400">
@@ -391,9 +550,7 @@ function FaqQuestion({ c }) {
           </span>
         ))}
       </div>
-      <p className="font-title text-base font-bold text-skop-black leading-snug">
-        Q : {c.question}
-      </p>
+      <p className="font-title text-base font-bold text-skop-black leading-snug">Q : {c.question}</p>
       <p className="text-sm text-skop-gray-700 whitespace-pre-line leading-relaxed">
         <span className="font-bold text-skop-black">R :</span> {c.answer}
       </p>
@@ -423,9 +580,7 @@ function CodeSiteImprovement({ c }) {
           Impact {c.impact}
         </span>
       </div>
-      <p className="font-title text-base font-bold text-skop-black leading-snug">
-        {c.improvement}
-      </p>
+      <p className="font-title text-base font-bold text-skop-black leading-snug">{c.improvement}</p>
       <div>
         <p className="text-[10px] font-bold uppercase tracking-wide text-skop-gray-400 mb-1.5">
           État actuel
@@ -459,8 +614,7 @@ function BlogArticle({ c }) {
         <span className="text-[11px] text-skop-gray-500">·</span>
         <span className="text-[11px] text-skop-gray-700">{c.wordCount} mots</span>
       </div>
-      <p className="font-title text-base font-bold text-skop-black leading-snug">{c.title}</p>
-      <p className="text-sm text-skop-gray-700 leading-relaxed italic">« {c.excerpt} »</p>
+      <p className="font-title text-lg font-bold text-skop-black leading-snug">{c.title}</p>
 
       {/* Site cible proposé */}
       <div className="rounded-skop bg-skop-pink-soft border border-skop-pink p-3">
@@ -499,6 +653,25 @@ function BlogArticle({ c }) {
         </div>
       </details>
 
+      {/* Résumé éditorial (chapeau italique) */}
+      {c.excerpt && (
+        <p className="text-sm text-skop-gray-700 italic leading-relaxed pl-3 border-l-2 border-skop-pink">
+          {c.excerpt}
+        </p>
+      )}
+
+      {/* Article complet */}
+      <div>
+        <p className="text-[10px] font-bold uppercase tracking-wide text-skop-gray-400 mb-2">
+          Article complet
+        </p>
+        <div className="prose-skop bg-white border border-skop-gray-200 rounded-skop p-5">
+          <p className="text-sm text-skop-black whitespace-pre-line leading-relaxed">
+            {c.body || c.excerpt}
+          </p>
+        </div>
+      </div>
+
       {/* Sources */}
       <div>
         <p className="text-[10px] font-bold uppercase tracking-wide text-skop-gray-400 mb-1.5">
@@ -506,7 +679,10 @@ function BlogArticle({ c }) {
         </p>
         <ul className="space-y-1">
           {c.sources.map((s, i) => (
-            <li key={i} className="text-xs text-skop-gray-700 pl-3 border-l-2 border-skop-gray-200">
+            <li
+              key={i}
+              className="text-xs text-skop-gray-700 pl-3 border-l-2 border-skop-gray-200"
+            >
               {s}
             </li>
           ))}
@@ -517,7 +693,7 @@ function BlogArticle({ c }) {
 }
 
 // ────────────────────────────────────────
-function AvisMessage({ c }) {
+function AvisOutreach({ c }) {
   return (
     <>
       <div className="flex items-center gap-2 flex-wrap">
@@ -578,7 +754,30 @@ function AvisMessage({ c }) {
 }
 
 // ────────────────────────────────────────
-function ReviewResponse({ c }) {
+function AvisCollected({ c }) {
+  return (
+    <>
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="font-semibold text-sm text-skop-black">{c.author}</span>
+        <span className="text-[11px] text-skop-gray-500">·</span>
+        <span className="text-[11px] text-skop-gray-500">{c.platform}</span>
+        <span className="text-[11px] text-skop-pink-vivid font-bold ml-1">
+          {'★'.repeat(c.rating)}
+          {'☆'.repeat(5 - c.rating)}
+        </span>
+        {c.usableInContent && (
+          <span className="ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-skop-pink-soft text-skop-pink-vivid border border-skop-pink-vivid">
+            Réutilisable
+          </span>
+        )}
+      </div>
+      <p className="text-sm text-skop-gray-700 leading-relaxed italic">« {c.text} »</p>
+    </>
+  );
+}
+
+// ────────────────────────────────────────
+function AvisResponse({ c }) {
   return (
     <>
       {/* Avis cible */}
